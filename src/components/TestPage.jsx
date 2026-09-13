@@ -129,6 +129,7 @@ export default function TestView() {
       <QuestionView
         question={currentQuestion}
         currentIndex={currentIndex}
+        userAnswers={userAnswers}
         totalQuestions={questions.length}
         selectedAnswer={userAnswers[currentQuestion.id]}
         onSelectOption={handleSelectOption}

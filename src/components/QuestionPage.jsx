@@ -5,13 +5,13 @@ import {
   ChevronRight,
   ListChecks,
 } from "lucide-react"
-import FormattedText from "./FormattedText"
 import { useGlobal } from "../GlobalContext"
-
+import FormattedText from "./FormattedText"
 
 export default function QuestionView({
   question,
   currentIndex,
+  userAnswers,
   totalQuestions,
   selectedAnswer,
   onSelectOption,
@@ -21,6 +21,9 @@ export default function QuestionView({
   topicTitle = "Knowledge Evaluation",
 }) {
   const { isReview } = useGlobal()
+  const answeredCount = Object.keys(userAnswers).filter(
+    (key) => userAnswers[key] !== undefined && userAnswers[key] !== null,
+  ).length
 
   return (
     <div
@@ -72,7 +75,10 @@ export default function QuestionView({
               color: "#38bdf8",
             }}
           >
-            {isReview ? 100 : Math.round(((currentIndex + 1) / totalQuestions) * 100)}% Complete
+            {isReview
+              ? 100
+              : Math.round((answeredCount / totalQuestions) * 100)}
+            % Complete
           </div>
 
           <button
@@ -137,29 +143,29 @@ export default function QuestionView({
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {question.options.map((option, idx) => {
               const isSelected = selectedAnswer === option
-              const isCorrect = option === question.correctAnswer;
+              const isCorrect = option === question.correctAnswer
 
-              let borderColor = isSelected ? "#38bdf8" : "#1e293b";
-              let textColor = isSelected ? "#38bdf8" : "#f8fafc";
-              let bgColor = isSelected ? "rgba(56, 189, 248, 0.1)" : "#0f172a";
+              let borderColor = isSelected ? "#38bdf8" : "#1e293b"
+              let textColor = isSelected ? "#38bdf8" : "#f8fafc"
+              let bgColor = isSelected ? "rgba(56, 189, 248, 0.1)" : "#0f172a"
 
               // 2. Review State (isReview === true)
               if (isReview) {
                 if (isCorrect) {
                   // Highlight the correct answer in green
-                  borderColor = "#34d399";
-                  textColor = "#34d399";
-                  bgColor = "rgba(52, 211, 153, 0.1)";
+                  borderColor = "#34d399"
+                  textColor = "#34d399"
+                  bgColor = "rgba(52, 211, 153, 0.1)"
                 } else if (isSelected && !isCorrect) {
                   // Highlight selected wrong answer in red
-                  borderColor = "#f43f5e";
-                  textColor = "#f43f5e";
-                  bgColor = "rgba(244, 63, 94, 0.1)";
+                  borderColor = "#f43f5e"
+                  textColor = "#f43f5e"
+                  bgColor = "rgba(244, 63, 94, 0.1)"
                 } else {
                   // Dim remaining unselected wrong options
-                  borderColor = "#1e293b";
-                  textColor = "#64748b";
-                  bgColor = "#090d16";
+                  borderColor = "#1e293b"
+                  textColor = "#64748b"
+                  bgColor = "#090d16"
                 }
               }
 
@@ -186,14 +192,14 @@ export default function QuestionView({
                       : "none",
                   }}
                   onMouseEnter={(e) => {
-                    if (!isSelected) {
+                    if (!isSelected && !isReview) {
                       e.currentTarget.style.borderColor = "#334155"
                       e.currentTarget.style.backgroundColor =
                         "rgba(30, 41, 59, 0.5)"
                     }
                   }}
                   onMouseLeave={(e) => {
-                    if (!isSelected) {
+                    if (!isSelected && !isReview) {
                       e.currentTarget.style.borderColor = "#1e293b"
                       e.currentTarget.style.backgroundColor = "#0f172a"
                     }

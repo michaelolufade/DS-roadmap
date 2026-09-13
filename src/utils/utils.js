@@ -10,6 +10,11 @@ export function getRandomQuestions(questionSet) {
 
       let selectedQuestion = level[randInt]
 
+      selectedQuestion = {
+        ...selectedQuestion,
+        options: shuffleArray(selectedQuestion.options),
+      }
+
       if (!selected.has(selectedQuestion.id)) {
         selected.add(selectedQuestion.id)
         tests.push(selectedQuestion)
@@ -18,6 +23,14 @@ export function getRandomQuestions(questionSet) {
     }
   }
 
-  tests.sort(() => Math.random() - 0.5)
-  return tests
+  return shuffleArray(tests)
+}
+
+function shuffleArray(array) {
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
 }
